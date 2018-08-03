@@ -1,0 +1,37 @@
+<div style="width: 100%; padding-bottom: 10px; background-color: #e1e1e1; padding: 10px 0 10px 0;text-align:center">
+    <img class="imgContent" style="max-width: 200px; height: auto; line-height: 100%; text-decoration: none; padding-bottom: 0; display: inline; vertical-align: bottom; margin-right: 0; border: 0;" id="eitem-1" src="https://cdn.shopify.com/s/files/1/0923/5128/files/logo_horizontal_print_black.png?12169987692481245590" width="580" border="0">
+</div>
+
+<br>
+{% if billing_address.name %}
+<p>Dear {{ billing_address.name }},</p>
+<p></p>
+{% endif %}
+<p>{% if fulfillment.item_count == item_count %}All{% elsif fulfillment_status == 'fulfilled' %}The last{% else %}Some{% endif %} of the items from order {{ name }} have now been shipped:</p>
+<p>{% for line in fulfillment.fulfillment_line_items %}<img src="{{ line.line_item | img_url: 'small' }}" />{{ line.quantity }}x {{ line.line_item.title }}<br>
+{% endfor %}</p>
+<p>{% if requires_shipping %}They are being shipped {% if fulfillment.tracking_company %}via {{ fulfillment.tracking_company }} {% endif %}to the following address: </p>
+
+<p>{{ shipping_address.name }}<br />
+{{ shipping_address.street }}<br />
+{{ shipping_address.city }}<br />
+{{ shipping_address.province }}
+{{ shipping_address.zip }}<br />
+{{ shipping_address.country }}</p>
+
+{% if fulfillment.tracking_numbers.size > 0 %}
+
+<p>The tracking details for these items are as follows:</p>
+<p>{% for tracking_number in fulfillment.tracking_numbers %} {{ tracking_number }}<br>{% endfor %}</p>
+
+<p>Thank you for ordering from Irving Farm Coffee Roasters! We roast and ship orders the business day after they are received. Shipping timelines begin at the time of handoff to carrier, after which Irving Farm is not responsible for lost or stolen goods. Allow time for the status of the shipment to correctly display at the link below and contact your carrier for all delivery and shipment questions.</p>
+<p><a href="{{ order_status_url }}">{{ order_status_url }}</a></p>
+
+
+
+{% endif %}{% endif %}{% if fulfillment_status != 'fulfilled' %}
+<p>If you have ordered any additional items, you will receive a separate confirmation email when they have been shipped.
+</p>
+{% endif %}
+
+<p>Thank you for ordering from {{ shop_name }}!</p>

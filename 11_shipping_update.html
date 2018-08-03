@@ -1,0 +1,21 @@
+<div style="width: 100%; padding-bottom: 10px; background-color: #e1e1e1; padding: 10px 0 10px 0;text-align:center">
+    <img class="imgContent" style="max-width: 200px; height: auto; line-height: 100%; text-decoration: none; padding-bottom: 0; display: inline; vertical-align: bottom; margin-right: 0; border: 0;" id="eitem-1" src="https://cdn.shopify.com/s/files/1/0923/5128/files/logo_horizontal_print_black.png?12169987692481245590" width="580" border="0">
+</div>
+
+<br>
+{% if billing_address.name %}
+<p>Dear {{ billing_address.name }},</p>
+{% endif %}
+
+<p>The following shipped items from order {{ name }} have been updated with new shipping information:</p>
+
+<ul style="list-style-type:none">
+  {% for line in fulfillment.fulfillment_line_items %}<li>
+    <img src="{{ line.line_item | img_url: 'small' }}" />
+    {{ line.quantity }}x {{ line.line_item.title }}
+  </li>{% endfor %}
+</ul>
+
+<p>They are being shipped{% if fulfillment.tracking_company %} via {{ fulfillment.tracking_company }}{% endif %} with tracking number {{ fulfillment.tracking_number }}. <a href="{{ order_status_url }}">Click here to see the status of this shipment</a>.</p>
+
+<p>Please allow some time for the status of the shipment to correctly display at the above address.</p>
